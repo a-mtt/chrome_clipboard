@@ -1,0 +1,37 @@
+{
+  "manifest_version": 2,
+  "name": "Clipboard History",
+  "version": "1.0",
+  "description": "Keep track of the 5 latest texts copied to the clipboard.",
+  "permissions": [
+    "storage",
+    "clipboardRead",
+    "activeTab"
+  ],
+  "icons": {
+    "48": "icon.png"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "browser_action": {
+    "default_icon": {
+      "48": "icon.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "Clipboard History"
+  }
+}
