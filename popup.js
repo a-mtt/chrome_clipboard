@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     response.history.forEach(function (text) {
       const listItem = document.createElement('li');
       listItem.textContent = text;
-      historyList.appendChild(listItem);
+      historyList.prepend(listItem);
     });
   });
 });
