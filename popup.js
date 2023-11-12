@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const historyList = document.getElementById('historyList');
+  const clearButton = document.getElementById('clearButton');
+
   chrome.runtime.sendMessage({ action: 'getHistory' }, function (response) {
-    const historyList = document.getElementById('historyList');
     response.history.forEach(function (text, index) {
       const listItem = createListItem(text, index + 1);
       historyList.prepend(listItem);
     });
   });
 
-  const clearButton = document.getElementById('clearButton');
-  clearButton.addEventListener('click', function () {
-    clearHistory();
-  });
+  clearButton.addEventListener('click', clearHistory);
 });
 
 function createListItem(text, index) {
@@ -29,25 +28,18 @@ function createListItem(text, index) {
   return listItem;
 }
 
-function copyToClipboard(text) {
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-
+async function copyToClipboard(text) {
   try {
-    document.execCommand('copy');
+    await navigator.clipboard.writeText(text);
     alert(`Copied to clipboard: ${text}`);
   } catch (err) {
     console.error('Unable to copy to clipboard', err);
-  } finally {
-    document.body.removeChild(textarea);
   }
 }
 
 function clearHistory() {
   chrome.runtime.sendMessage({ action: 'clearHistory' }, function () {
     const historyList = document.getElementById('historyList');
-    historyList.innerHTML = '';// Clear the list in the DOM
+    historyList.innerHTML = ''; // Clear the list in the DOM
   });
 }

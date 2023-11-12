@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
       history.push(request.text);
       chrome.storage.local.set({ history: history });
-      sendResponse({});  // Send an empty response synchronously
+      sendResponse({});  // Send an empty response asynchronously
     });
     return true;  // Indicates that sendResponse will be called asynchronously
   } else if (request.action === 'getHistory') {
@@ -22,11 +22,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     });
     return true;  // Indicates that sendResponse will be called asynchronously
   } else if (request.action === 'clearHistory') {
-    chrome.storage.local.get({ history: [] }, function (result) {
-      let history = result.history || [];  // Ensure history is initialized
-      history=[]
-      chrome.storage.local.set({ history: history });
-      sendResponse({});  // Send an empty response synchronously
+    chrome.storage.local.set({ history: [] }, function () {
+      sendResponse({});  // Send an empty response asynchronously
     });
     return true;    // Indicates that sendResponse will be called asynchronously
   }

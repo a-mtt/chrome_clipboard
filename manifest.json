@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Clipboard History",
   "version": "1.0",
   "description": "Keep track of the 5 latest texts copied to the clipboard.",
@@ -12,10 +12,7 @@
     "48": "icon.png"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -27,7 +24,7 @@
       ]
     }
   ],
-  "browser_action": {
+  "action": {
     "default_icon": {
       "48": "icon.png"
     },
