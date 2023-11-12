@@ -1,10 +1,41 @@
 document.addEventListener('DOMContentLoaded', function () {
   chrome.runtime.sendMessage({ action: 'getHistory' }, function (response) {
     const historyList = document.getElementById('historyList');
-    response.history.forEach(function (text) {
-      const listItem = document.createElement('li');
-      listItem.textContent = text;
+    response.history.forEach(function (text, index) {
+      const listItem = createListItem(text, index + 1);
       historyList.prepend(listItem);
     });
   });
 });
+
+function createListItem(text, index) {
+  const listItem = document.createElement('li');
+  const copyButton = document.createElement('button');
+
+  // Set emoji as innerHTML for the copy button
+  copyButton.innerHTML = '📋';
+  copyButton.addEventListener('click', function () {
+    copyToClipboard(text);
+  });
+
+  listItem.appendChild(copyButton);
+  listItem.appendChild(document.createTextNode(` ${text}`)); // Add the text content
+
+  return listItem;
+}
+
+function copyToClipboard(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    document.execCommand('copy');
+    alert(`Copied to clipboard: ${text}`);
+  } catch (err) {
+    console.error('Unable to copy to clipboard', err);
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
