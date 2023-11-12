@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
       historyList.prepend(listItem);
     });
   });
+
+  const clearButton = document.getElementById('clearButton');
+  clearButton.addEventListener('click', function () {
+    clearHistory();
+  });
 });
 
 function createListItem(text, index) {
@@ -38,4 +43,11 @@ function copyToClipboard(text) {
   } finally {
     document.body.removeChild(textarea);
   }
+}
+
+function clearHistory() {
+  chrome.runtime.sendMessage({ action: 'clearHistory' }, function () {
+    const historyList = document.getElementById('historyList');
+    historyList.innerHTML = '';// Clear the list in the DOM
+  });
 }
